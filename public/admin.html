@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Administrador | Alex API</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<h1>👑 Panel de Administración</h1>
+
+<div class="grid">
+
+<div class="box">
+<h2>👥 Usuarios</h2>
+<p id="users">0</p>
+</div>
+
+<div class="box">
+<h2>📊 Solicitudes</h2>
+<p id="requests">0</p>
+</div>
+
+<div class="box">
+<h2>💳 Pagos</h2>
+<p id="payments">0</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>Lista de usuarios</h2>
+
+<table width="100%" id="table">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Usuario</th>
+<th>Correo</th>
+<th>Plan</th>
+<th>Rol</th>
+<th>Acción</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+const token=localStorage.getItem("token");
+
+fetch("/admin/dashboard",{
+
+headers:{
+Authorization:"Bearer "+token
+}
+
+})
+.then(r=>r.json())
+.then(data=>{
+
+document.getElementById("users").innerHTML=data.users;
+document.getElementById("requests").innerHTML=data.requests;
+document.getElementById("payments").innerHTML=data.payments;
+
+});
+
+fetch("/admin/users",{
+
+headers:{
+Authorization:"Bearer "+token
+}
+
+})
+.then(r=>r.json())
+.then(users=>{
+
+const tbody=document.querySelector("tbody");
+
+users.forEach(user=>{
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${user.id}</td>
+
+<td>${user.username}</td>
+
+<td>${user.email}</td>
+
+<td>${user.plan}</td>
+
+<td>${user.role}</td>
+
+<td>
+
+<button onclick="deleteUser(${user.id})">
+
+Eliminar
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+});
+
+function deleteUser(id){
+
+if(!confirm("¿Eliminar usuario?")) return;
+
+fetch("/admin/user/"+id,{
+
+method:"DELETE",
+
+headers:{
+Authorization:"Bearer "+token
+}
+
+})
+.then(r=>r.json())
+.then(()=>{
+
+location.reload();
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>
