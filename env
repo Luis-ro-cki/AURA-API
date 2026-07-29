@@ -1,0 +1,8 @@
+PORT=3000
+
+JWT_SECRET=alex_api_super_secret
+
+ADMIN_EMAIL=l29472954@gmail.com
+ADMIN_PASSWORD=luis123
+
+PAYPAL_EMAIL=l29472954@gmail.com
