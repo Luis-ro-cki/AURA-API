@@ -17,14 +17,20 @@ async function loadDashboard() {
 
         const data = await res.json();
 
-        document.getElementById("username").innerText = data.user;
-        document.getElementById("plan").innerText = data.plan;
-        document.getElementById("requests").innerText = data.requests;
-        document.getElementById("apikey").innerText = apiKey;
+        if (!data.success) {
+            alert("API Key inválida.");
+            return;
+        }
 
-    } catch (e) {
+        document.getElementById("username").textContent = data.user;
+        document.getElementById("plan").textContent = data.plan;
+        document.getElementById("requests").textContent = data.requests;
+        document.getElementById("apikey").textContent = apiKey;
 
-        alert("Error al cargar el dashboard.");
+    } catch (err) {
+
+        console.error(err);
+        alert("No se pudo cargar el dashboard.");
 
     }
 
@@ -34,29 +40,39 @@ function copyKey() {
 
     navigator.clipboard.writeText(apiKey);
 
-    alert("API Key copiada.");
+    alert("API Key copiada correctamente.");
 
 }
 
 async function regenerateKey() {
 
-    const res = await fetch("/api/apikey/regenerate", {
+    try {
 
-        headers: {
-            "x-api-key": apiKey
+        const res = await fetch("/api/apikey/regenerate", {
+            headers: {
+                "x-api-key": apiKey
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            localStorage.setItem("apikey", data.api_key);
+
+            alert("Nueva API Key creada.");
+
+            location.reload();
+
+        } else {
+
+            alert(data.message);
+
         }
 
-    });
+    } catch (err) {
 
-    const data = await res.json();
-
-    if (data.success) {
-
-        localStorage.setItem("apikey", data.api_key);
-
-        alert("Nueva API Key creada.");
-
-        location.reload();
+        alert("Error al regenerar la API Key.");
 
     }
 
@@ -66,7 +82,7 @@ function logout() {
 
     localStorage.clear();
 
-    window.location = "/login.html";
+    location.href = "/login.html";
 
 }
 
