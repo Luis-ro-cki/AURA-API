@@ -4,9 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard | Alex API</title>
+<title>Alex API - Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -14,83 +14,18 @@
 
 <body>
 
-<div class="dashboard">
+<div class="sidebar">
 
-<h1>🚀 Alex API Dashboard</h1>
+<h2>🚀 Alex API</h2>
 
-<div class="grid">
-
-<div class="box">
-
-<h2>👤 Usuario</h2>
-
-<p id="username">Cargando...</p>
-
-</div>
-
-<div class="box">
-
-<h2>💎 Plan</h2>
-
-<p id="plan">FREE</p>
-
-</div>
-
-<div class="box">
-
-<h2>📊 Solicitudes</h2>
-
-<p id="requests">0</p>
-
-</div>
-
-<div class="box">
-
-<h2>🔑 API Key</h2>
-
-<div class="api-key" id="apikey"></div>
-
-<br>
-
-<button onclick="copyKey()">
-
-📋 Copiar API Key
-
-</button>
-
-</div>
-
-<div class="box">
-
-<h2>🔄 Regenerar API Key</h2>
-
-<button onclick="regenerateKey()">
-
-Generar Nueva API Key
-
-</button>
-
-</div>
-
-<div class="box">
-
-<h2>📖 Documentación</h2>
-
-<a href="/docs.html">
-
-<button>
-
-Abrir Documentación
-
-</button>
-
-</a>
-
-</div>
-
-<div class="box">
-
-<h2>🚪 Cerrar sesión</h2>
+<a href="#">🏠 Dashboard</a>
+<a href="#">🔑 API Key</a>
+<a href="/docs.html">📖 Documentación</a>
+<a href="#">📊 Estadísticas</a>
+<a href="#">🎵 Play</a>
+<a href="#">🎥 Play2</a>
+<a href="#">💎 Premium</a>
+<a href="/admin.html">👑 Panel Admin</a>
 
 <button onclick="logout()">
 
@@ -100,12 +35,46 @@ Cerrar sesión
 
 </div>
 
-</div>
+<div class="main">
+
+<h1>
+
+Bienvenido,
+
+<span id="username">
+
+Cargando...
+
+</span>
+
+</h1>
+
+<div class="topcards">
+
+<div class="topcard">
+
+<h3>💎 Plan</h3>
+
+<p id="plan">
+
+FREE
+
+</p>
 
 </div>
 
-<script src="dashboard.js"></script>
+<div class="topcard">
 
-</body>
+<h3>📊 Requests</h3>
 
-</html>
+<p id="requests">
+
+0
+
+</p>
+
+</div>
+
+<div class="topcard">
+
+<h3>🔑
