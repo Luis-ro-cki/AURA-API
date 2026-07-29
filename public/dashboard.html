@@ -54,7 +54,7 @@
 
 <button onclick="copyKey()">
 
-Copiar API Key
+📋 Copiar API Key
 
 </button>
 
@@ -66,7 +66,7 @@ Copiar API Key
 
 <button onclick="regenerateKey()">
 
-Regenerar
+Generar Nueva API Key
 
 </button>
 
@@ -80,7 +80,7 @@ Regenerar
 
 <button>
 
-Abrir
+Abrir Documentación
 
 </button>
 
@@ -88,75 +88,24 @@ Abrir
 
 </div>
 
+<div class="box">
+
+<h2>🚪 Cerrar sesión</h2>
+
+<button onclick="logout()">
+
+Cerrar sesión
+
+</button>
+
+</div>
+
 </div>
 
 </div>
 
-<script>
-
-const token=localStorage.getItem("token");
-
-const apiKey=localStorage.getItem("apikey");
-
-if(!token||!apiKey){
-
-location="/login.html";
-
-}
-
-fetch("/api",{
-
-headers:{
-"x-api-key":apiKey
-}
-
-})
-
-.then(r=>r.json())
-
-.then(data=>{
-
-document.getElementById("username").innerHTML=data.user;
-
-document.getElementById("plan").innerHTML=data.plan;
-
-document.getElementById("requests").innerHTML=data.requests;
-
-document.getElementById("apikey").innerHTML=apiKey;
-
-});
-
-function copyKey(){
-
-navigator.clipboard.writeText(apiKey);
-
-alert("API Key copiada.");
-
-}
-
-function regenerateKey(){
-
-fetch("/api/apikey/regenerate",{
-
-headers:{
-"x-api-key":apiKey
-}
-
-})
-
-.then(r=>r.json())
-
-.then(data=>{
-
-localStorage.setItem("apikey",data.api_key);
-
-location.reload();
-
-});
-
-}
-
-</script>
+<script src="dashboard.js"></script>
 
 </body>
+
 </html>
