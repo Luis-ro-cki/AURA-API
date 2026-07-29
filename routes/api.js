@@ -2,80 +2,119 @@ const express = require("express");
 const crypto = require("crypto");
 
 const router = express.Router();
-
 const db = require("../database/database");
+const apiKey = require("../middleware/apikey");
 
-// Validar API Key
-router.use((req, res, next) => {
+// =========================
+// INFORMACIÓN DEL USUARIO
+// =========================
 
-    const apiKey = req.query.apikey || req.headers["x-api-key"];
-
-    if (!apiKey) {
-        return res.status(401).json({
-            success: false,
-            message: "API Key requerida."
-        });
-    }
-
-    db.get(
-        "SELECT * FROM users WHERE api_key=?",
-        [apiKey],
-        (err, user) => {
-
-            if (err || !user) {
-                return res.status(401).json({
-                    success: false,
-                    message: "API Key inválida."
-                });
-            }
-
-            db.run(
-                "UPDATE users SET requests=requests+1 WHERE id=?",
-                [user.id]
-            );
-
-            req.user = user;
-
-            next();
-
-        }
-    );
-
-});
-
-// Información de la API
-router.get("/", (req, res) => {
+router.get("/", apiKey, (req, res) => {
 
     res.json({
+
         success: true,
-        api: "Alex API",
-        plan: req.user.plan,
+
         user: req.user.username,
-        requests: req.user.requests
+
+        email: req.user.email,
+
+        plan: req.user.plan,
+
+        requests: req.user.requests,
+
+        api_key: req.user.api_key
+
     });
 
 });
 
-// Regenerar API Key
-router.get("/apikey/regenerate", (req, res) => {
+// =========================
+// REGENERAR API KEY
+// =========================
+
+router.get("/apikey/regenerate", apiKey, (req, res) => {
 
     const newKey =
         "alex_" +
-        crypto.randomBytes(24).toString("hex");
+        crypto.randomBytes(32).toString("hex");
 
     db.run(
+
         "UPDATE users SET api_key=? WHERE id=?",
-        [newKey, req.user.id],
-        () => {
+
+        [
+
+            newKey,
+
+            req.user.id
+
+        ],
+
+        function(err){
+
+            if(err){
+
+                return res.json({
+
+                    success:false,
+
+                    message:"No se pudo regenerar la API Key."
+
+                });
+
+            }
+
+            db.run(
+
+                "UPDATE api_keys SET api_key=? WHERE user_id=?",
+
+                [
+
+                    newKey,
+
+                    req.user.id
+
+                ]
+
+            );
 
             res.json({
-                success: true,
-                api_key: newKey
+
+                success:true,
+
+                api_key:newKey
+
             });
 
         }
+
     );
 
 });
 
-module.exports = router;
+// =========================
+// ESTADO DE LA API
+// =========================
+
+router.get("/status",(req,res)=>{
+
+res.json({
+
+success:true,
+
+name:"Alex API",
+
+developer:"Luis González",
+
+version:"1.0.0",
+
+status:"online",
+
+time:new Date()
+
+});
+
+});
+
+module.exports=router;
