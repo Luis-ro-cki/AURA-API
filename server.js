@@ -15,19 +15,24 @@ app.use(express.static(path.join(__dirname, "public")));
 // Base de datos
 require("./database/database");
 
-// Rutas
+// Rutas principales
 app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
 app.use("/admin", require("./routes/admin"));
+
+// Descargas
+app.use("/api/download/play", require("./routes/download/play"));
+app.use("/api/download/play2", require("./routes/download/play2"));
 
 // Página principal
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// API
-app.get("/api", (req, res) => {
+// Estado de la API
+app.get("/status", (req, res) => {
     res.json({
+        success: true,
         name: "Alex API",
         version: "1.0.0",
         developer: "Luis González",
