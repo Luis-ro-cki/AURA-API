@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Dashboard | Alex API</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<h1>🚀 Alex API Dashboard</h1>
+
+<div class="grid">
+
+<div class="box">
+
+<h2>👤 Usuario</h2>
+
+<p id="username">Cargando...</p>
+
+</div>
+
+<div class="box">
+
+<h2>💎 Plan</h2>
+
+<p id="plan">FREE</p>
+
+</div>
+
+<div class="box">
+
+<h2>📊 Solicitudes</h2>
+
+<p id="requests">0</p>
+
+</div>
+
+<div class="box">
+
+<h2>🔑 API Key</h2>
+
+<div class="api-key" id="apikey"></div>
+
+<br>
+
+<button onclick="copyKey()">
+
+Copiar API Key
+
+</button>
+
+</div>
+
+<div class="box">
+
+<h2>🔄 Regenerar API Key</h2>
+
+<button onclick="regenerateKey()">
+
+Regenerar
+
+</button>
+
+</div>
+
+<div class="box">
+
+<h2>📖 Documentación</h2>
+
+<a href="/docs.html">
+
+<button>
+
+Abrir
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const token=localStorage.getItem("token");
+
+const apiKey=localStorage.getItem("apikey");
+
+if(!token||!apiKey){
+
+location="/login.html";
+
+}
+
+fetch("/api",{
+
+headers:{
+"x-api-key":apiKey
+}
+
+})
+
+.then(r=>r.json())
+
+.then(data=>{
+
+document.getElementById("username").innerHTML=data.user;
+
+document.getElementById("plan").innerHTML=data.plan;
+
+document.getElementById("requests").innerHTML=data.requests;
+
+document.getElementById("apikey").innerHTML=apiKey;
+
+});
+
+function copyKey(){
+
+navigator.clipboard.writeText(apiKey);
+
+alert("API Key copiada.");
+
+}
+
+function regenerateKey(){
+
+fetch("/api/apikey/regenerate",{
+
+headers:{
+"x-api-key":apiKey
+}
+
+})
+
+.then(r=>r.json())
+
+.then(data=>{
+
+localStorage.setItem("apikey",data.api_key);
+
+location.reload();
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
