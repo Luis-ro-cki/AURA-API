@@ -77,4 +77,108 @@ FREE
 
 <div class="topcard">
 
-<h3>🔑
+<h3>🔑 API Key</h3>
+
+<div class="api-key" id="apikey">
+
+Cargando...
+
+</div>
+
+<br>
+
+<button onclick="copyKey()">
+
+📋 Copiar
+
+</button>
+
+<br><br>
+
+<button onclick="regenerateKey()">
+
+🔄 Regenerar
+
+</button>
+
+</div>
+
+</div>
+
+<div class="endpoint">
+
+<h2>🎵 Probar .play</h2>
+
+<input
+type="text"
+id="query"
+placeholder="Ej: Bad Bunny">
+
+<button onclick="testPlay()">
+
+Buscar Audio
+
+</button>
+
+<div id="playResult"></div>
+
+</div>
+
+<div class="endpoint">
+
+<h2>🎥 Probar .play2</h2>
+
+<input
+type="text"
+id="query2"
+placeholder="Ej: Bad Bunny">
+
+<button onclick="testPlay2()">
+
+Buscar Video
+
+</button>
+
+<div id="playResult2"></div>
+
+</div>
+
+</div>
+
+<script src="dashboard.js"></script>
+
+<script>
+
+async function testPlay(){
+
+const q=document.getElementById("query").value;
+
+const key=localStorage.getItem("apikey");
+
+const res=await fetch("/api/download/play?apikey="+key+"&query="+encodeURIComponent(q));
+
+const data=await res.json();
+
+document.getElementById("playResult").innerHTML="<pre>"+JSON.stringify(data,null,2)+"</pre>";
+
+}
+
+async function testPlay2(){
+
+const q=document.getElementById("query2").value;
+
+const key=localStorage.getItem("apikey");
+
+const res=await fetch("/api/download/play2?apikey="+key+"&query="+encodeURIComponent(q));
+
+const data=await res.json();
+
+document.getElementById("playResult2").innerHTML="<pre>"+JSON.stringify(data,null,2)+"</pre>";
+
+}
+
+</script>
+
+</body>
+
+</html>
