@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Iniciar sesión | Alex API</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<form id="loginForm">
+
+<h1>Iniciar Sesión</h1>
+
+<input
+type="email"
+id="email"
+placeholder="Correo electrónico"
+required>
+
+<input
+type="password"
+id="password"
+placeholder="Contraseña"
+required>
+
+<button type="submit">
+
+Entrar
+
+</button>
+
+<br><br>
+
+<p style="text-align:center;">
+
+¿No tienes cuenta?
+
+<a href="/register.html">
+
+Registrarse
+
+</a>
+
+</p>
+
+</form>
+
+<script>
+
+document
+.getElementById("loginForm")
+.addEventListener("submit",async(e)=>{
+
+e.preventDefault();
+
+const email=
+document.getElementById("email").value;
+
+const password=
+document.getElementById("password").value;
+
+const res=await fetch("/auth/login",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+email,
+password
+
+})
+
+});
+
+const data=await res.json();
+
+if(data.success){
+
+localStorage.setItem(
+"token",
+data.token
+);
+
+localStorage.setItem(
+"apikey",
+data.api_key
+);
+
+localStorage.setItem(
+"username",
+data.username
+);
+
+window.location="/dashboard.html";
+
+}else{
+
+alert(data.message);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
